@@ -10,7 +10,7 @@ interface TeamSelection {
 }
 
 // Path to team history JSON file
-const historyPath = path.join(process.cwd(), 'public', 'teamHistory.json');
+const historyPath = path.join('/tmp', 'teamHistory.json');
 
 export async function GET() {
   try {

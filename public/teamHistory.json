@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "teamName": "Scale Masters",
+    "focusArea": "Scaling Solutions for Maximum Use",
+    "participants": [
+      {
+        "id": 34,
+        "email": "samuel.babafemi@ubagroup.com",
+        "name": "Samuel Babafemi"
+      },
+      {
+        "id": 4,
+        "email": "damilola.olaoye@ubagroup.com",
+        "name": "Damilola Olaoye"
+      },
+      {
+        "id": 52,
+        "email": "chukwuemeka.agazie@ubagroup.com",
+        "name": "Chukwuemeka Agazie"
+      }
+    ],
+    "timestamp": "2025-08-14T22:36:47.633Z"
+  }
+]

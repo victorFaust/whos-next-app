@@ -11,7 +11,8 @@ interface TeamSelection {
   timestamp: string;
 }
 
-const historyPath = path.join(process.cwd(), 'public', 'teamHistory.json');
+// Writable location on Vercel
+const historyPath = path.join('/tmp', 'teamHistory.json');
 
 export async function GET() {
   try {
@@ -19,7 +20,6 @@ export async function GET() {
     const selected = pickRandomParticipants(3);
     const stats = getStats();
 
-    // Handle no participants case
     if (selected.length === 0) {
       return NextResponse.json(
         {
@@ -32,7 +32,7 @@ export async function GET() {
       );
     }
 
-    // Call the /api/teams handler directly
+    // Get team data
     const teamResponse = await getTeams();
     let teamResult;
     try {
@@ -45,12 +45,11 @@ export async function GET() {
       throw new Error(`Failed to fetch team data: ${teamResult.error || 'Unknown error'}`);
     }
 
-    // Validate team data
     if (!teamResult.teamName || !teamResult.focusArea) {
       throw new Error('Invalid team data: Missing teamName or focusArea');
     }
 
-    // Save to team history
+    // Read history from /tmp/ (if exists)
     let history: TeamSelection[] = [];
     try {
       const fileContent = await fs.readFile(historyPath, 'utf-8');
@@ -59,12 +58,13 @@ export async function GET() {
         console.warn('teamHistory.json is not an array, resetting to []');
         history = [];
       }
-    } catch (error) {
-      console.warn('Failed to read teamHistory.json, initializing as []:', error);
+    } catch {
+      // If file doesn't exist, create it
       await fs.writeFile(historyPath, JSON.stringify([]));
       history = [];
     }
 
+    // Append new record
     history.push({
       teamName: teamResult.teamName,
       focusArea: teamResult.focusArea,
@@ -82,7 +82,7 @@ export async function GET() {
   } catch (error) {
     console.error('Play error:', error);
     return NextResponse.json(
-      { error: `Failed to select participants: ${error}` },
+      { error: `Failed to select users: ${error}` },
       { status: 500 }
     );
   }

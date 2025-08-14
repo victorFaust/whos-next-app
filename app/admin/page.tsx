@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Upload, RotateCcw, Users, CheckCircle, Trash2, UserX, UserCheck } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import Swal from 'sweetalert2';
 
 interface Stats {
   total: number;
@@ -43,7 +43,6 @@ export default function AdminPage() {
   const [roleStats, setRoleStats] = useState<RoleStats>({});
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [teamHistory, setTeamHistory] = useState<TeamSelection[]>([]);
-  const { toast } = useToast();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -54,10 +53,11 @@ export default function AdminPage() {
 
   const handleUpload = async () => {
     if (!file) {
-      toast({
-        title: "No file selected",
-        description: "Please select an Excel file to upload.",
-        variant: "destructive"
+      Swal.fire({
+        title: 'No file selected',
+        text: 'Please select an Excel file to upload.',
+        icon: 'error',
+        confirmButtonColor: '#cc0000'
       });
       return;
     }
@@ -75,9 +75,11 @@ export default function AdminPage() {
       const result = await response.json();
 
       if (response.ok) {
-        toast({
-          title: "Upload successful!",
-          description: result.message,
+        Swal.fire({
+          title: 'Upload successful!',
+          text: result.message,
+          icon: 'success',
+          confirmButtonColor: '#cc0000'
         });
         setFile(null);
         const fileInput = document.getElementById('file-upload') as HTMLInputElement;
@@ -87,17 +89,19 @@ export default function AdminPage() {
         fetchParticipants();
         fetchTeamHistory();
       } else {
-        toast({
-          title: "Upload failed",
-          description: result.error,
-          variant: "destructive"
+        Swal.fire({
+          title: 'Upload failed',
+          text: result.error,
+          icon: 'error',
+          confirmButtonColor: '#cc0000'
         });
       }
     } catch (error) {
-      toast({
-        title: "Upload failed",
-        description: "An error occurred while uploading the file.",
-        variant: "destructive"
+      Swal.fire({
+        title: 'Upload failed',
+        text: 'An error occurred while uploading the file.',
+        icon: 'error',
+        confirmButtonColor: '#cc0000'
       });
     } finally {
       setUploading(false);
@@ -105,6 +109,19 @@ export default function AdminPage() {
   };
 
   const handleReset = async () => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'This will clear all participants and selections. This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#cc0000',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, reset everything!',
+      cancelButtonText: 'Cancel'
+    });
+
+    if (!result.isConfirmed) return;
+
     setResetting(true);
     try {
       const response = await fetch('/api/reset', {
@@ -114,26 +131,30 @@ export default function AdminPage() {
       const result = await response.json();
 
       if (response.ok) {
-        toast({
-          title: "Reset successful!",
-          description: result.message,
+        Swal.fire({
+          title: 'Reset successful!',
+          text: result.message,
+          icon: 'success',
+          confirmButtonColor: '#cc0000'
         });
         setStats({ total: 0, picked: 0, remaining: 0, excluded: 0 });
         setRoleStats({});
         setParticipants([]);
         setTeamHistory([]);
       } else {
-        toast({
-          title: "Reset failed",
-          description: result.error,
-          variant: "destructive"
+        Swal.fire({
+          title: 'Reset failed',
+          text: result.error,
+          icon: 'error',
+          confirmButtonColor: '#cc0000'
         });
       }
     } catch (error) {
-      toast({
-        title: "Reset failed",
-        description: "An error occurred while resetting the list.",
-        variant: "destructive"
+      Swal.fire({
+        title: 'Reset failed',
+        text: 'An error occurred while resetting the list.',
+        icon: 'error',
+        confirmButtonColor: '#cc0000'
       });
     } finally {
       setResetting(false);
@@ -166,37 +187,50 @@ export default function AdminPage() {
 
   const handleToggleExclusion = async (id: number, isExcluded: boolean) => {
     const action = isExcluded ? 'include' : 'exclude';
-    if (!confirm(`Are you sure you want to ${action} this participant from future draws?`)) {
-      return;
-    }
+    const result = await Swal.fire({
+      title: `${action.charAt(0).toUpperCase() + action.slice(1)} participant?`,
+      text: `Are you sure you want to ${action} this participant from future draws?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#cc0000',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: `Yes, ${action}!`,
+      cancelButtonText: 'Cancel'
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const response = await fetch(`/api/participants?id=${id}&action=toggleExclusion`, {
         method: 'PATCH',
       });
 
-      const result = await response.json();
+      const apiResult = await response.json();
 
       if (response.ok) {
-        toast({
+        Swal.fire({
           title: `Participant ${action}d!`,
-          description: result.message,
+          text: apiResult.message,
+          icon: 'success',
+          confirmButtonColor: '#cc0000'
         });
         fetchStats();
         fetchRoleStats();
         fetchParticipants();
       } else {
-        toast({
-          title: "Update failed",
-          description: result.error,
-          variant: "destructive"
+        Swal.fire({
+          title: 'Update failed',
+          text: apiResult.error,
+          icon: 'error',
+          confirmButtonColor: '#cc0000'
         });
       }
     } catch (error) {
-      toast({
-        title: "Update failed",
-        description: "An error occurred while updating the participant.",
-        variant: "destructive"
+      Swal.fire({
+        title: 'Update failed',
+        text: 'An error occurred while updating the participant.',
+        icon: 'error',
+        confirmButtonColor: '#cc0000'
       });
     }
   };
@@ -214,37 +248,50 @@ export default function AdminPage() {
   };
 
   const handleDeleteParticipant = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this participant?')) {
-      return;
-    }
+    const result = await Swal.fire({
+      title: 'Delete participant?',
+      text: 'Are you sure you want to delete this participant? This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, delete!',
+      cancelButtonText: 'Cancel'
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const response = await fetch(`/api/participants?id=${id}`, {
         method: 'DELETE',
       });
 
-      const result = await response.json();
+      const apiResult = await response.json();
 
       if (response.ok) {
-        toast({
-          title: "Participant deleted!",
-          description: result.message,
+        Swal.fire({
+          title: 'Participant deleted!',
+          text: apiResult.message,
+          icon: 'success',
+          confirmButtonColor: '#cc0000'
         });
         fetchStats();
         fetchRoleStats();
         fetchParticipants();
       } else {
-        toast({
-          title: "Delete failed",
-          description: result.error,
-          variant: "destructive"
+        Swal.fire({
+          title: 'Delete failed',
+          text: apiResult.error,
+          icon: 'error',
+          confirmButtonColor: '#cc0000'
         });
       }
     } catch (error) {
-      toast({
-        title: "Delete failed",
-        description: "An error occurred while deleting the participant.",
-        variant: "destructive"
+      Swal.fire({
+        title: 'Delete failed',
+        text: 'An error occurred while deleting the participant.',
+        icon: 'error',
+        confirmButtonColor: '#cc0000'
       });
     }
   };

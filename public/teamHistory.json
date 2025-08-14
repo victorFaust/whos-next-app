@@ -1,1 +1,90 @@
-[]
+[
+  {
+    "teamName": "Agile Achievers",
+    "focusArea": "Project Management Tools",
+    "participants": [
+      {
+        "id": 32,
+        "email": "oluwasegun.ogunkuade@ubagroup.com",
+        "name": "Oluwasegun Ogunkuade"
+      },
+      {
+        "id": 62,
+        "email": "dayo.shopeju@ubagroup.com",
+        "name": "Dayo Shopeju"
+      },
+      {
+        "id": 41,
+        "email": "faruk.taiwo@ubagroup.com",
+        "name": "Faruk Taiwo"
+      }
+    ],
+    "timestamp": "2025-08-14T22:18:15.285Z"
+  },
+  {
+    "teamName": "FinTech Frontiers",
+    "focusArea": "Financial Technology (FinTech) / NextGen Banking",
+    "participants": [
+      {
+        "id": 26,
+        "email": "david.aimakhede@ubagroup.com",
+        "name": "David Aimakhede"
+      },
+      {
+        "id": 13,
+        "email": "prosper.kalu@ubagroup.com",
+        "name": "Prosper Kalu"
+      },
+      {
+        "id": 60,
+        "email": "busayo.oyinloye@ubagroup.com",
+        "name": "Busayo Oyinloye"
+      }
+    ],
+    "timestamp": "2025-08-14T22:19:56.331Z"
+  },
+  {
+    "teamName": "Transaction Titans",
+    "focusArea": "Payment Systems & Gateways",
+    "participants": [
+      {
+        "id": 49,
+        "email": "ejike.godswill@ubagroup.com",
+        "name": "Ejike Godswill"
+      },
+      {
+        "id": 3,
+        "email": "nwakaego.chijioke@ubagroup.com",
+        "name": "Nwakaego Chijioke"
+      },
+      {
+        "id": 47,
+        "email": "catherine.ajayi@ubagroup.com",
+        "name": "Catherine Ajayi"
+      }
+    ],
+    "timestamp": "2025-08-14T22:21:21.118Z"
+  },
+  {
+    "teamName": "Privacy Guardians",
+    "focusArea": "Data Privacy and Security",
+    "participants": [
+      {
+        "id": 52,
+        "email": "chukwuemeka.agazie@ubagroup.com",
+        "name": "Chukwuemeka Agazie"
+      },
+      {
+        "id": 23,
+        "email": "oluwasegun.tinuala@ubagroup.com",
+        "name": "Oluwasegun Tinuala"
+      },
+      {
+        "id": 20,
+        "email": "nelson.john@ubagroup.com",
+        "name": "Nelson John"
+      }
+    ],
+    "timestamp": "2025-08-14T22:22:27.283Z"
+  }
+]

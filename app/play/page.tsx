@@ -141,8 +141,8 @@ export default function PlayPage() {
           <Confetti
             width={typeof window !== 'undefined' ? window.innerWidth : 0}
             height={typeof window !== 'undefined' ? window.innerHeight : 0}
-            numberOfPieces={300}
-            recycle={false}
+            numberOfPieces={100}
+            recycle={true}
             tweenDuration={10000}
             style={{ zIndex: 60 }}
           />
